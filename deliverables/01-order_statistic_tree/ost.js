@@ -244,12 +244,12 @@ OST.prototype = OSTPrototype;
 
 var tree = new OST();
 var inserted = [];
-for (var i = 0; i < 100; ++i) {
+for (var i = 0; i < 20; ++i) {
 	var random = Math.floor(Math.random() * 100);
 	inserted.push(random);
 	console.log(`Inserting ${random}.`);
 	tree.insert(random);
-	//tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
+	tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
 }
 for (var i = 0; i < 10; ++i) {
 	var randomIndex = Math.floor(Math.random() * inserted.length);
@@ -263,5 +263,5 @@ while (inserted.length > 0) {
 	console.log(`Removing ${inserted[randomIndex]}.`);
 	tree.remove(inserted[randomIndex]);
 	inserted.splice(randomIndex, 1);
-	//if (inserted.length > 0) tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
+	if (inserted.length > 0) tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
 }
