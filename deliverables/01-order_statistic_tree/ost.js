@@ -11,7 +11,7 @@ var OSTNodePrototype = {
 				}
 				else {
 					node.antecessor = this;
-					node.tree = tree;
+					node.tree = this.tree;
 					this.left = node;
 				}
 				if (this.right) this.right.propagateOrderChange(function(currentNode){ currentNode.order++; });
@@ -24,7 +24,7 @@ var OSTNodePrototype = {
 				}
 				else {
 					node.antecessor = this;
-					node.tree = tree;
+					node.tree = this.tree;
 					this.right = node;
 				}
 			}
@@ -149,12 +149,14 @@ var OSTNodePrototype = {
 	inOrder: function(operation) {
 		if (!(operation instanceof Function)) {
 			operation = function(current) {
-				console.log(current.data.toString());
+				console.log(current.toString());
 			}
 		}
-		if (this.left) this.left.inOrder(operation);
-		operation(this);
-		if (this.right) this.right.inOrder(operation);
+		var shouldContinue = true;
+		if (this.left) shouldContinue = this.left.inOrder(operation);
+		if (shouldContinue == undefined || shouldContinue) shouldContinue = operation(this);
+		if (this.right && (shouldContinue == undefined || shouldContinue)) shouldContinue = this.right.inOrder(operation);
+		return shouldContinue;
 	},
 	toString: function() {
 		return `Node with data: ${this.data}, left child: ${this.left != undefined && this.left.data}, right child: ${this.right != undefined && this.right.data}, antecessor: ${this.antecessor != undefined && this.antecessor.data}, order: ${this.order}.`;
@@ -218,16 +220,18 @@ var OSTPrototype = {
 		else throw "No node nor data to remove";
 	},
 	select: function(order) {
-		if (this.treeRoot) return this.treeRoot.select(order);
+		if (this.treeRoot) {
+			return this.treeRoot.select(order);
+		}
 		throw "Tree is empty, cannot select anything.";
 	},
 	rank: function(nodeOrData) {
 		if (nodeOrData instanceof OSTNode) {
-			if (this.treeRoot) this.treeRoot.rank(nodeOrData);
+			if (this.treeRoot) return this.treeRoot.rank(nodeOrData);
 			else throw "Tree is empty, cannot rank anything.";
 		}
 		else if (nodeOrData != undefined) {
-			this.rank(new OSTNode(nodeOrData, this));
+			return this.rank(new OSTNode(nodeOrData, this));
 		}
 		else throw "No node nor data to rank";
 	}
@@ -242,26 +246,33 @@ function OST(lessThan, compare) {
 
 OST.prototype = OSTPrototype;
 
-var tree = new OST();
-var inserted = [];
-for (var i = 0; i < 20; ++i) {
-	var random = Math.floor(Math.random() * 100);
-	inserted.push(random);
-	console.log(`Inserting ${random}.`);
-	tree.insert(random);
-	tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
-}
-for (var i = 0; i < 10; ++i) {
-	var randomIndex = Math.floor(Math.random() * inserted.length);
-	console.log(`Rank of ${inserted[randomIndex]} is ${tree.rank(inserted[randomIndex])}.`);
-}
-//while (inserted.length > 0) {
-//	// Selections
-//}
-while (inserted.length > 0) {
-	var randomIndex = Math.floor(Math.random() * inserted.length);
-	console.log(`Removing ${inserted[randomIndex]}.`);
-	tree.remove(inserted[randomIndex]);
-	inserted.splice(randomIndex, 1);
-	if (inserted.length > 0) tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
+function testOST() {
+	var tree = new OST();
+	var inserted = [];
+	for (var i = 0; i < 20; ++i) {
+		var random = Math.floor(Math.random() * 100);
+		inserted.push(random);
+		console.log(`Inserting ${random}.`);
+		tree.insert(random);
+		tree.treeRoot.inOrder(function(currentNode){ console.log(currentNode.toString()); });
+	}
+	for (var i = 0; i < 10; ++i) {
+		var randomIndex = Math.floor(Math.random() * inserted.length);
+		console.log(`Rank of ${inserted[randomIndex]} is ${tree.rank(inserted[randomIndex])}.`);
+	}
+	for (var i = 0; i < 10; ++i) {
+		var randomRank = Math.floor(Math.random() * inserted.length);
+		console.log(`The selection of node with rank ${randomRank} is ${tree.select(randomRank).data}.`);
+	}
+	var topTen = [];
+	var counter = 0;
+	tree.treeRoot.inOrder(function(currentNode){ if (counter++ < 10) { topTen.push(currentNode.data); } else return false; });
+	console.log(topTen);
+	while (inserted.length > 0) {
+		var randomIndex = Math.floor(Math.random() * inserted.length);
+		console.log(`Removing ${inserted[randomIndex]}.`);
+		tree.remove(inserted[randomIndex]);
+		inserted.splice(randomIndex, 1);
+		if (inserted.length > 0) tree.treeRoot.inOrder();
+	}
 }
