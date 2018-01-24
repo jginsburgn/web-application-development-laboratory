@@ -1,0 +1,17 @@
+/* January 24th 2018, Arthur Alves & Jonathan Ginsburg */
+
+section {
+	max-width: 1080px;
+	margin: auto;
+}
+
+#treeRepresentation {
+	width: 100%;
+	height: 58vh;
+	border: 1px solid lightgray;
+}
+
+.author {
+	text-decoration: underline;
+	font-size: 0.9em;
+}

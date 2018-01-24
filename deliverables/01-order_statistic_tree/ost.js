@@ -1,5 +1,6 @@
 // See https://en.wikipedia.org/wiki/Order_statistic_tree.
 // The following implements an order statistic tree class.
+// January 24th 2018, Arthur Alves & Jonathan Ginsburg
 
 var OSTNodePrototype = {
 	insert: function (node) {

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title>Order Statistic Tree</title>
+	<meta name="description" content="Order Statistic Tree">
+	<meta name="author" content="Arthur Alves & Jonathan Ginsburg">
+
+	<!--[if lt IE 9]>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+	<![endif]-->
+	<script src="ost.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" type="text/css">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<section>
+		<header><h2>Order Statistic Tree</h2></header>
+		<p><span class="author">Arthur Alves<br>Jonathan Ginsburg</span></p>
+		<input type="text" id="nodeInput" placeholder="Node"><br>
+		<button onclick="addNode();">Add Node</button>
+		<button onclick="removeNode();">Remove Node</button>
+		<div id="treeRepresentation"></div>
+		<div id="treeInformation"></div>
+	</section>
+	<script src="driver.js"></script>
+</body>
+</html>
