@@ -1,1 +1,2 @@
+The file named consumer.js is a wrapper for consuming the services exposed by this backend.
 Find front-end React app at: https://github.com/danianguiano/LabWeb
